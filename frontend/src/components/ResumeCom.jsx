@@ -4,8 +4,8 @@ import { TbWorldUpload } from "react-icons/tb";
 
 function ResumeCom() {
   return (
-    <div className="bg-white md:block flex flex-col items-start gap-6 lg:w-3/12 w-full max-h-[70vh] ">
-      <div className="flex flex-col  gap-5 py-5 xl:px-3 px-1">
+    <div className="bg-white md:block flex flex-col items-start gap-6 lg:w-4/12 w-full max-h-[100vh] ">
+      <div className="flex flex-col w-full  gap-5 py-5 xl:px-3 px-1">
         <div className="flex gap-3 items-center">
           <MdMarkEmailUnread size={30} />
           <h2 className="xl:text-2xl text-xl font-semibold">
@@ -25,8 +25,8 @@ function ResumeCom() {
           Subscribe
         </button>
       </div>
-      <div className="flex flex-col gap-5 py-5 xl:px-3 px-1">
-        <div className="flex gap-3 items-center md:mt-24">
+      <div className="flex flex-col w-full gap-5 py-5 xl:px-3 px-1">
+        <div className="flex gap-3 items-center md:mt-8">
           <TbWorldUpload size={30} />
           <h2 className="xl:text-2xl text-xl font-semibold">
             Get noticed faster

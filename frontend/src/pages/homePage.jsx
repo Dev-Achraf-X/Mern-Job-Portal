@@ -4,13 +4,78 @@ import { GiPositionMarker } from "react-icons/gi";
 import FilterComp from "../components/filterComp";
 import JobsComp from "../components/jobsComp";
 import ResumeCom from "../components/ResumeCom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import JobComp from "../components/JobComp";
+import { FiDatabase } from "react-icons/fi";
 
 function homePage() {
   const [filter, setFilter] = useState(false);
+  const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [jobs, setJobs] = useState([]);
+
+  // handle filter menu
   const handleFilter = () => {
     setFilter(!filter);
   };
+
+  // handle Input change
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+  };
+  useEffect(() => {
+    fetch("Jobs.json")
+      .then((res) => res.json())
+      .then((data) => setJobs(data));
+  }, []);
+
+  // filter jobs by title
+  const filteredItems = jobs.filter(
+    (job) => job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1
+  );
+
+  // radio filtering
+  const handleRadioChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  // button handle filtering
+  const handleButtonFiltering = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  // main function
+  const filteredData = (jobs, selected, query) => {
+    let fitleredJobs = jobs;
+
+    // filtering input items
+    if (query) {
+      fitleredJobs = filteredItems;
+    }
+
+    // category filtering
+    if (selected) {
+      fitleredJobs = fitleredJobs.filter(
+        ({
+          jobLocation,
+          postingDate,
+          experienceLevel,
+          employmentType,
+          salaryType,
+          maxPrice,
+        }) =>
+          jobLocation.toLowerCase() === selected.toLowerCase() ||
+          parseInt(maxPrice) <= selected||
+          salaryType.toLowerCase() === selected.toLowerCase() ||
+          employmentType.toLowerCase() === selected.toLowerCase() ||
+          postingDate >= selected ||
+          experienceLevel.toLowerCase() === selected.toLowerCase()
+      );
+    }
+    return fitleredJobs.map((data, idx) => <JobComp key={idx} data={data} />);
+  };
+
+  const result = filteredData(jobs, selectedCategory, query);
 
   return (
     <div>
@@ -32,6 +97,8 @@ function homePage() {
               type="search"
               placeholder="What position are you looking for?"
               className="w-full outline-none text-lg"
+              onChange={handleInputChange}
+              value={query}
             />
           </div>
           <div className="md:w-1/2 w-full flex items-center">
@@ -41,7 +108,7 @@ function homePage() {
                 className="text-gray-500 cursor-pointer"
               />
               <input
-                type="select"
+                type="search"
                 placeholder="Location"
                 className="outline-none text-lg"
               />
@@ -54,8 +121,17 @@ function homePage() {
       </div>
       <div className="w-full bg-[#fafafa] py-16">
         <div className="max-w-[1460px] m-auto flex lg:flex-row flex-col-reverse relative gap-7">
-          <FilterComp filter={filter} setFilter={setFilter} />
-          <JobsComp handleFilter={handleFilter} filter={filter} />
+          <FilterComp
+            handleRadioChange={handleRadioChange}
+            handleButtonFiltering={handleButtonFiltering}
+          />
+          <JobsComp
+            handleRadioChange={handleRadioChange}
+            handleButtonFiltering={handleButtonFiltering}
+            handleFilter={handleFilter}
+            filter={filter}
+            result={result}
+          />
           <ResumeCom />
         </div>
       </div>
