@@ -3,11 +3,11 @@ import HeaderMenu from "../lib/HeaderMenu";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import headLinks from "../../public/HeaderLinks.js";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function HeaderComp() {
   const [openMenu, setOpenMenu] = useState(false);
-  const [authUser, setAuthUser] = useState(false);
-
+  const { isAuthenticated, userData, logout } = useAuth();
   return (
     <header className="flex max-w-[1460px] m-auto justify-between items-center py-5 w-full mx-auto sm:px-5">
       <div>
@@ -51,18 +51,19 @@ function HeaderComp() {
         ) : null}
       </nav>
 
-      {authUser ? (
+      {isAuthenticated ? (
         <div className="flex items-center justify-end lg:gap-5 gap-2">
-          <a href="#" className="lg:w-12 w-8 lg:h-12 h-8">
-            <img
-              src="/images/Loom.png"
-              alt="logo"
-              className="rounded-full size-full bg-cover"
-            />
-          </a>
-          <button className="border-gray-200 border rounded-md py-2 px-4 lg:text-xl text-sm text-gray-700 hover:bg-[#3574e2] hover:text-white transition-all ">
-            Logout
-          </button>
+          <div>
+            <span className="text-xl font-medium mr-3 bg-[#3575E2] text-white py-2 px-2 rounded-xl">
+              {userData?.firstname}
+            </span>
+            <button
+              onClick={logout}
+              className="border-gray-200 border rounded-md py-2 px-4 lg:text-xl text-sm text-gray-700 hover:bg-[#3574e2] hover:text-white transition-all "
+            >
+              Logout
+            </button>
+          </div>
           {!openMenu ? (
             <HiOutlineMenuAlt3
               size={36}
