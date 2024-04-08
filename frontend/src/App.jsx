@@ -7,7 +7,6 @@ import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import SalaryPage from "./pages/SalaryPage.jsx";
 import { Toaster } from "react-hot-toast";
-import { useState } from "react";
 import { useAuth } from "./contexts/AuthContext.jsx";
 
 function App() {
